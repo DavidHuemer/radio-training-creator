@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "radio-training-creator": {
+      "hosting": {
+        "radio-training-creator": [
+          "radio-training-creator"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "radio-training-creator"
+  }
+}

@@ -100,6 +100,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "radio-training-creator:build:production",
+            "firebaseProject": "radio-training-creator",
+            "firebaseHostingSite": "radio-training-creator"
+          }
         }
       }
     }
