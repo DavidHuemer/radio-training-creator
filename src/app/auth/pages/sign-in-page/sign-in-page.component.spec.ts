@@ -2,19 +2,36 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {SignInPageComponent} from './sign-in-page.component';
 import {Credentials} from "../../../data/Credentials";
+import {By} from "@angular/platform-browser";
+import {DebugElement} from "@angular/core";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 describe('SignInPageComponent', () => {
   let component: SignInPageComponent;
   let fixture: ComponentFixture<SignInPageComponent>;
+  let debugElement: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SignInPageComponent]
+      declarations: [SignInPageComponent],
+      imports: [
+        MatFormFieldModule,
+        BrowserAnimationsModule,
+        MatInputModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        FormsModule
+      ]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(SignInPageComponent);
     component = fixture.componentInstance;
+    debugElement = fixture.debugElement;
     fixture.detectChanges();
   });
 
@@ -35,7 +52,33 @@ describe('SignInPageComponent', () => {
       expect(component.signInFormGroup.valid).toBe(credentialsForCheck.valid);
     });
   });
+
+  it('should set the login button to disabled at the beginning', () => {
+    expect(debugElement.query(By.css('.login-button')).nativeElement.disabled).toBeTruthy();
+  });
+
+  it('should update the validation by changing the input texts', () => {
+    const credentials = getCredentialsForValidCheck();
+    let emailInput = debugElement.query(By.css(".email")).nativeElement;
+    let passwordInput = debugElement.query(By.css(".password")).nativeElement;
+    let loginButton = debugElement.query(By.css('.login-button')).nativeElement;
+
+    credentials.forEach(credentialsForCheck => {
+      emailInput.value = credentialsForCheck.credentials.email;
+      emailInput.dispatchEvent(new Event('input'));
+
+      passwordInput.value = credentialsForCheck.credentials.password;
+      passwordInput.dispatchEvent(new Event('input'));
+
+      expect(component.signInFormGroup.valid).toBe(credentialsForCheck.valid);
+
+      fixture.detectChanges();
+
+      expect(loginButton.disabled).toBe(!credentialsForCheck.valid);
+    });
+  });
 });
+
 
 function getCredentialsForValidCheck(): { credentials: Credentials, valid: boolean }[] {
   return [

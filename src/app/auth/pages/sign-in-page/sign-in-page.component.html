@@ -1,1 +1,36 @@
-<p>sign-in-page works!</p>
+<div class="page">
+  <div class="auth-container">
+    <div class="column inputs" [formGroup]="signInFormGroup">
+      <h1>Anmelden</h1>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Email</mat-label>
+        <input class="email" matInput name="email" formControlName="email">
+        <mat-error *ngIf="signInFormGroup.hasError('email', 'email') && !signInFormGroup.hasError('required', 'email')">
+          Bitte geben Sie eine gültige Email ein
+        </mat-error>
+        <mat-error *ngIf="signInFormGroup.hasError('required', 'email')">
+          Email ist <strong>erforderlich</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Password</mat-label>
+        <input class="password" matInput name="password" formControlName="password">
+        <mat-error *ngIf="signInFormGroup.hasError('required', 'password')">
+          Passwort ist <strong>erforderlich</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="login-button" [disabled]="!signInFormGroup.valid">
+        Anmelden
+      </button>
+    </div>
+
+    <div class="column welcome">
+      <h1>Willkommen zurück!</h1>
+      <h2>Starten Sie mit der Optimierung ihrer Funkübungen</h2>
+      <img src="/assets/img/fire-station.svg" alt="Feuerwehr">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+@import "~src/styles/pageStyles";
+@import "../../styles/authStyles";
+
+.page {
+  display: flex;
+  background-color: blue;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-container {
+  background-color: white;
+  width: 600px;
+  height: 400px;
+  display: grid;
+  grid-template-columns: 300px auto;
+}
