@@ -26,4 +26,12 @@ describe('AuthService', () => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
+
+  it('should call createUserWithEmailAndPassword when signUp', async () => {
+    let spy = jasmine.createSpy('createUserWithEmailAndPasswordRef').and.returnValue(new Promise(() => Promise.resolve()));
+    service.createUserWithEmailAndPasswordRef = spy;
+    service.signUp({email: '', password: ''}).then(() => {
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
 });

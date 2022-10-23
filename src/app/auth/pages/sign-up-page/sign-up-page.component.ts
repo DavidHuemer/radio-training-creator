@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
 import {RadioTrainingErrorStateMatcher} from "../../../core/error/RadioTrainingErrorStateMatcher";
+import {AuthService} from "../../../core/services/auth/auth.service";
+import {UserCreationData} from "../../../core/data/User";
+import {FirebaseError} from "../../../core/firebase/FirebaseError";
 
 @Component({
   selector: 'app-sign-up-page',
@@ -29,7 +32,7 @@ export class SignUpPageComponent implements OnInit {
     return pass === confirmPass ? null : {notSame: true}
   }
 
-  constructor() {
+  constructor(private authService: AuthService) {
     this.signUpFormGroup = new FormGroup({
       firstName: this.firstNameFormControl,
       email: this.emailFormControl,
@@ -40,6 +43,32 @@ export class SignUpPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  async signUp() {
+    if (!this.signUpFormGroup.valid) {
+      console.log('Cannot create user because sign up form group is not valid')
+      return;
+    }
+
+    const userCreationData = this.getUserCreationData();
+    this.authService.signUp(
+      userCreationData
+    ).then(
+      (user) => {
+      },
+      (e: FirebaseError) => {
+      }
+    )
+  }
+
+  private getUserCreationData(): UserCreationData {
+    return {
+      email: this.emailFormControl.value ?? '',
+      firstName: this.firstNameFormControl.value ?? '',
+      lastName: this.lastNameFormControl.value ?? '',
+      password: this.passwordFormControl.value ?? ''
+    };
   }
 
 }

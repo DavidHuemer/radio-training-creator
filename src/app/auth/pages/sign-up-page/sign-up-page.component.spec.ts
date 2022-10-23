@@ -7,6 +7,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {UserCreationData} from "../../../core/data/User";
+import {AuthService} from "../../../core/services/auth/auth.service";
 
 interface UserCreationDataForValidCheck extends UserCreationData {
   repeatPassword: string,
@@ -16,8 +17,11 @@ interface UserCreationDataForValidCheck extends UserCreationData {
 describe('SignUpPageComponent', () => {
   let component: SignUpPageComponent;
   let fixture: ComponentFixture<SignUpPageComponent>;
+  let authSpy: any;
 
   beforeEach(async () => {
+    authSpy = jasmine.createSpyObj('AuthService', ['signUp']);
+
     await TestBed.configureTestingModule({
       declarations: [SignUpPageComponent],
       imports: [
@@ -27,7 +31,11 @@ describe('SignUpPageComponent', () => {
         MatButtonModule,
         ReactiveFormsModule,
         FormsModule
+      ],
+      providers: [
+        {provide: AuthService, useValue: authSpy}
       ]
+
     })
       .compileComponents();
 
@@ -54,6 +62,29 @@ describe('SignUpPageComponent', () => {
       component.repeatPasswordFormControl.setValue(userCreationData.repeatPassword);
       expect(component.signUpFormGroup.valid).toBe(userCreationData.expectedValid);
     });
+  });
+
+  it('should not call the auth service when the sign up form is not valid', async () => {
+    component.firstNameFormControl.setValue('');
+    component.lastNameFormControl.setValue('');
+    component.emailFormControl.setValue('');
+    component.passwordFormControl.setValue('');
+    component.repeatPasswordFormControl.setValue('');
+
+    await component.signUp();
+    expect(authSpy.signUp).toHaveBeenCalledTimes(0);
+  });
+
+  it('should call the auth service when the sign up form is valid', async () => {
+    component.firstNameFormControl.setValue('Max');
+    component.lastNameFormControl.setValue('Mustermann');
+    component.emailFormControl.setValue('max.mustermann@gmail.com');
+    component.passwordFormControl.setValue('strongPass');
+    component.repeatPasswordFormControl.setValue('strongPass');
+
+    authSpy.signUp.and.returnValue(Promise.resolve());
+    await component.signUp();
+    expect(authSpy.signUp).toHaveBeenCalledTimes(1);
   });
 });
 
