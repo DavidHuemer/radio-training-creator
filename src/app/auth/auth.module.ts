@@ -9,12 +9,14 @@ import {MatButtonModule} from "@angular/material/button";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { SignUpPageComponent } from './pages/sign-up-page/sign-up-page.component';
+import { AuthFooterComponent } from './components/auth-footer/auth-footer.component';
 
 
 @NgModule({
   declarations: [
     SignInPageComponent,
-    SignUpPageComponent
+    SignUpPageComponent,
+    AuthFooterComponent
   ],
   imports: [
     CommonModule,
