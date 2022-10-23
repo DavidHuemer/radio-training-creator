@@ -8,11 +8,13 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { SignUpPageComponent } from './pages/sign-up-page/sign-up-page.component';
 
 
 @NgModule({
   declarations: [
-    SignInPageComponent
+    SignInPageComponent,
+    SignUpPageComponent
   ],
   imports: [
     CommonModule,
