@@ -10,8 +10,12 @@
 
 .auth-container {
   background-color: white;
-  width: 600px;
+  width: 650px;
   height: 400px;
   display: grid;
   grid-template-columns: 300px auto;
+}
+
+.mat-form-field {
+  width: 100%;
 }

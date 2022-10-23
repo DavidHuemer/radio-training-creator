@@ -22,9 +22,17 @@
         </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="login-button" [disabled]="!signInFormGroup.valid" (click)="login()">
+      <button mat-raised-button color="primary" class="login-button" [disabled]="!signInFormGroup.valid"
+              (click)="login()">
         Anmelden
       </button>
+
+      <hr>
+
+      <p class="switch-sign-in-up">
+        <span>Noch keinen Account </span>
+        <a routerLink="../sign-up">Hier Registrieren</a>
+      </p>
     </div>
 
     <div class="column welcome">
