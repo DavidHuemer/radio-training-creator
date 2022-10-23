@@ -1,15 +1,13 @@
 @import "~src/styles/variables";
 
-.page{
-  background: linear-gradient(0deg, $highlight-8-color 0%, $highlight-88-color  100%);
-
+.page {
+  background: linear-gradient(0deg, $highlight-8-color 0%, $highlight-88-color 100%);
   display: flex;
-  background-color: blue;
   align-items: center;
   justify-content: center;
 }
 
-.auth-container{
+.auth-container {
   background-color: whitesmoke;
   width: 1000px;
   display: grid;
@@ -34,7 +32,7 @@
   align-items: center;
 }
 
-.welcome{
+.welcome {
   background-color: #E1F4ED;
   display: flex;
   justify-content: space-between;
@@ -49,5 +47,3 @@ img {
 h1 {
   font-weight: bold;
 }
-
-

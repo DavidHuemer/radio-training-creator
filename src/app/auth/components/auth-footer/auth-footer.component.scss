@@ -1,0 +1,15 @@
+@import "~src/styles/variables";
+
+.auth-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 2rem;
+  background-color: $dark-color;
+  color: $light-color;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
