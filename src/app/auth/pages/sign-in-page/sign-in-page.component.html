@@ -22,7 +22,7 @@
         </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="login-button" [disabled]="!signInFormGroup.valid">
+      <button mat-raised-button color="primary" class="login-button" [disabled]="!signInFormGroup.valid" (click)="login()">
         Anmelden
       </button>
     </div>

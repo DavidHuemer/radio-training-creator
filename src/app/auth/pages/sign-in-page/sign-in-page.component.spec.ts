@@ -9,13 +9,17 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {AuthService} from "../../../core/services/auth/auth.service";
 
 describe('SignInPageComponent', () => {
   let component: SignInPageComponent;
   let fixture: ComponentFixture<SignInPageComponent>;
   let debugElement: DebugElement;
+  let authSpy: any;
 
   beforeEach(async () => {
+    authSpy = jasmine.createSpyObj('AuthService', ['login']);
+
     await TestBed.configureTestingModule({
       declarations: [SignInPageComponent],
       imports: [
@@ -25,6 +29,9 @@ describe('SignInPageComponent', () => {
         MatButtonModule,
         ReactiveFormsModule,
         FormsModule
+      ],
+      providers: [
+        {provide: AuthService, useValue: authSpy}
       ]
     })
       .compileComponents();
@@ -76,6 +83,23 @@ describe('SignInPageComponent', () => {
 
       expect(loginButton.disabled).toBe(!credentialsForCheck.valid);
     });
+  });
+
+  it('should not call the auth service when the sign in form is not valid', async () => {
+    component.emailFormControl.setValue('');
+    component.passwordFormControl.setValue('');
+
+    component.login();
+    expect(authSpy.login).toHaveBeenCalledTimes(0);
+  });
+
+  it('should call the auth service login method when the sign in form is valid', async () => {
+    component.emailFormControl.setValue('max.mustermann@gmail.com');
+    component.passwordFormControl.setValue('goodPassword');
+
+    authSpy.login.and.returnValue(Promise.resolve({name: 'david'}))
+    component.login();
+    expect(authSpy.login).toHaveBeenCalledTimes(1);
   });
 });
 
