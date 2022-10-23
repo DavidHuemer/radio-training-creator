@@ -2,6 +2,11 @@
 
 .page{
   background: linear-gradient(0deg, $highlight-8-color 0%, $highlight-88-color  100%);
+
+  display: flex;
+  background-color: blue;
+  align-items: center;
+  justify-content: center;
 }
 
 .auth-container{

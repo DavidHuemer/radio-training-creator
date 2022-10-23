@@ -1,1 +1,63 @@
-<p>sign-up-page works!</p>
+<div class="page">
+  <div class="auth-container">
+    <div class="column inputs" [formGroup]="signUpFormGroup">
+      <div class="inline">
+        <mat-form-field appearance="standard">
+          <mat-label>Vorname</mat-label>
+          <input class="firstName" matInput name="firstName" formControlName="firstName">
+          <mat-error *ngIf="signUpFormGroup.hasError('required', 'firstName')">
+            Vorname ist <strong>erforderlich</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Nachname</mat-label>
+          <input class="lastName" matInput name="lastName" formControlName="lastName">
+          <mat-error *ngIf="signUpFormGroup.hasError('required', 'lastName')">
+            Nachname ist <strong>erforderlich</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Email</mat-label>
+        <input class="email" matInput name="email" formControlName="email">
+        <mat-error *ngIf="signUpFormGroup.hasError('email', 'email') && !signUpFormGroup.hasError('required', 'email')">
+          Bitte geben Sie eine gültige Email ein
+        </mat-error>
+        <mat-error *ngIf="signUpFormGroup.hasError('required', 'email')">
+          Email ist <strong>erforderlich</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Passwort</mat-label>
+        <input type="password" class="password" matInput name="password" formControlName="password">
+        <mat-error *ngIf="signUpFormGroup.hasError('required', 'password')">
+          Passwort ist <strong>erforderlich</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Passwort wiederholen</mat-label>
+        <input type="password" class="repeatPassword" matInput name="repeatPassword" formControlName="repeatPassword"
+               [errorStateMatcher]="matcher">
+        <mat-error *ngIf="signUpFormGroup.hasError('required', 'repeatPassword')">
+          Passwort wiederholen ist <strong>erforderlich</strong>
+        </mat-error>
+
+        <mat-error *ngIf="signUpFormGroup.hasError('notSame')">
+          Die Passwörter stimmen <strong>nicht</strong> überein
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" [disabled]="!signUpFormGroup.valid">
+        Registrieren
+      </button>
+    </div>
+
+    <div class="column welcome">
+
+    </div>
+  </div>
+</div>
