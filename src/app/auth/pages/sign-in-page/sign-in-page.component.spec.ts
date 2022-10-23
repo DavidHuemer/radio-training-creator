@@ -94,7 +94,7 @@ describe('SignInPageComponent', () => {
     component.emailFormControl.setValue('');
     component.passwordFormControl.setValue('');
 
-    component.login();
+    await component.login();
     expect(authSpy.login).toHaveBeenCalledTimes(0);
   });
 
@@ -103,7 +103,7 @@ describe('SignInPageComponent', () => {
     component.passwordFormControl.setValue('goodPassword');
 
     authSpy.login.and.returnValue(Promise.resolve({name: 'david'}))
-    component.login();
+    await component.login();
     expect(authSpy.login).toHaveBeenCalledTimes(1);
   });
 
