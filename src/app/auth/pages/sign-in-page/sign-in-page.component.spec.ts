@@ -10,15 +10,19 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AuthService} from "../../../core/services/auth/auth.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {FirebaseError} from "../../../core/firebase/FirebaseError";
 
 describe('SignInPageComponent', () => {
   let component: SignInPageComponent;
   let fixture: ComponentFixture<SignInPageComponent>;
   let debugElement: DebugElement;
   let authSpy: any;
+  let snackBarSpy: any;
 
   beforeEach(async () => {
     authSpy = jasmine.createSpyObj('AuthService', ['login']);
+    snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
       declarations: [SignInPageComponent],
@@ -31,7 +35,8 @@ describe('SignInPageComponent', () => {
         FormsModule
       ],
       providers: [
-        {provide: AuthService, useValue: authSpy}
+        {provide: AuthService, useValue: authSpy},
+        {provide: MatSnackBar, useValue: snackBarSpy}
       ]
     })
       .compileComponents();
@@ -100,6 +105,23 @@ describe('SignInPageComponent', () => {
     authSpy.login.and.returnValue(Promise.resolve({name: 'david'}))
     component.login();
     expect(authSpy.login).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call the mat snackbar when the sign in was not successful', async () => {
+    component.emailFormControl.setValue('max.mustermann@gmail.com');
+    component.passwordFormControl.setValue('wrongPassword');
+
+    let firebaseError: FirebaseError = {
+      code: '',
+      name: '',
+      customData: null,
+      message: '',
+      stack: ''
+    };
+
+    authSpy.login.and.returnValue(Promise.reject(firebaseError))
+    await component.login();
+    expect(snackBarSpy.open).toHaveBeenCalledTimes(1);
   });
 });
 
