@@ -4,6 +4,7 @@ import {RadioTrainingErrorStateMatcher} from "../../../core/error/RadioTrainingE
 import {AuthService} from "../../../core/services/auth/auth.service";
 import {UserCreationData} from "../../../core/data/User";
 import {FirebaseError} from "../../../core/firebase/FirebaseError";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-sign-up-page',
@@ -32,7 +33,7 @@ export class SignUpPageComponent implements OnInit {
     return pass === confirmPass ? null : {notSame: true}
   }
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private _snackBar: MatSnackBar) {
     this.signUpFormGroup = new FormGroup({
       firstName: this.firstNameFormControl,
       email: this.emailFormControl,
@@ -58,6 +59,7 @@ export class SignUpPageComponent implements OnInit {
       (user) => {
       },
       (e: FirebaseError) => {
+        this._snackBar.open('Fehler beim Registrieren', 'Ok', {duration: 2500});
       }
     )
   }

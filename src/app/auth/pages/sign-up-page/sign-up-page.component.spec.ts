@@ -8,6 +8,9 @@ import {MatButtonModule} from "@angular/material/button";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {UserCreationData} from "../../../core/data/User";
 import {AuthService} from "../../../core/services/auth/auth.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {FirebaseError} from "../../../core/firebase/FirebaseError";
+import {AuthFooterComponent} from "../../components/auth-footer/auth-footer.component";
 
 interface UserCreationDataForValidCheck extends UserCreationData {
   repeatPassword: string,
@@ -18,12 +21,15 @@ describe('SignUpPageComponent', () => {
   let component: SignUpPageComponent;
   let fixture: ComponentFixture<SignUpPageComponent>;
   let authSpy: any;
+  let snackBarSpy: any;
+
 
   beforeEach(async () => {
     authSpy = jasmine.createSpyObj('AuthService', ['signUp']);
+    snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
-      declarations: [SignUpPageComponent],
+      declarations: [SignUpPageComponent, AuthFooterComponent],
       imports: [
         MatFormFieldModule,
         BrowserAnimationsModule,
@@ -33,7 +39,8 @@ describe('SignUpPageComponent', () => {
         FormsModule
       ],
       providers: [
-        {provide: AuthService, useValue: authSpy}
+        {provide: AuthService, useValue: authSpy},
+        {provide: MatSnackBar, useValue: snackBarSpy}
       ]
 
     })
@@ -85,6 +92,26 @@ describe('SignUpPageComponent', () => {
     authSpy.signUp.and.returnValue(Promise.resolve());
     await component.signUp();
     expect(authSpy.signUp).toHaveBeenCalledTimes(1);
+  });
+
+  it('should open the snack bar when the user creation was not successful', async () => {
+    component.firstNameFormControl.setValue('max');
+    component.lastNameFormControl.setValue('mustermann');
+    component.emailFormControl.setValue('max.mustermann@gmail.com');
+    component.passwordFormControl.setValue('strongPassword');
+    component.repeatPasswordFormControl.setValue('strongPassword');
+
+    let firebaseError: FirebaseError = {
+      code: '',
+      name: '',
+      customData: null,
+      message: '',
+      stack: ''
+    };
+
+    authSpy.signUp.and.returnValue(Promise.reject(firebaseError))
+    await component.signUp();
+    expect(snackBarSpy.open).toHaveBeenCalledTimes(1);
   });
 });
 
