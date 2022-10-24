@@ -52,7 +52,7 @@
         </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" [disabled]="!signUpFormGroup.valid">
+      <button mat-raised-button color="primary" [disabled]="!signUpFormGroup.valid" (click)="signUp()">
         Registrieren
       </button>
 

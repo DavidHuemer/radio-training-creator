@@ -11,22 +11,36 @@ import {AuthService} from "../../../core/services/auth/auth.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {FirebaseError} from "../../../core/firebase/FirebaseError";
 import {AuthFooterComponent} from "../../components/auth-footer/auth-footer.component";
+import {UserService} from "../../../core/services/auth/user.service";
 
-interface UserCreationDataForValidCheck extends UserCreationData {
+interface ComponentUserCreationData extends UserCreationData {
   repeatPassword: string,
+}
+
+interface UserCreationDataForValidCheck extends ComponentUserCreationData {
   expectedValid: boolean;
 }
+
+const inValidComponentUserCreationData: ComponentUserCreationData
+  = getUserCreationDataForValidCheck('', '', '',
+  '', '', false);
+
+const validComponentUserCreationData: ComponentUserCreationData
+  = getUserCreationDataForValidCheck('max', 'mustermann', 'max.mustermann@gmail.com',
+  'strongPass', 'strongPass', true);
 
 describe('SignUpPageComponent', () => {
   let component: SignUpPageComponent;
   let fixture: ComponentFixture<SignUpPageComponent>;
   let authSpy: any;
+  let userServiceSpy: any;
   let snackBarSpy: any;
 
 
   beforeEach(async () => {
     authSpy = jasmine.createSpyObj('AuthService', ['signUp']);
     snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
+    userServiceSpy = jasmine.createSpyObj('UserService', ['createUser']);
 
     await TestBed.configureTestingModule({
       declarations: [SignUpPageComponent, AuthFooterComponent],
@@ -40,7 +54,8 @@ describe('SignUpPageComponent', () => {
       ],
       providers: [
         {provide: AuthService, useValue: authSpy},
-        {provide: MatSnackBar, useValue: snackBarSpy}
+        {provide: MatSnackBar, useValue: snackBarSpy},
+        {provide: UserService, useValue: userServiceSpy},
       ]
 
     })
@@ -62,44 +77,32 @@ describe('SignUpPageComponent', () => {
   it('should be valid when all required fields are valid', () => {
     const userCreationDataArr = getUserCreationDataArrayForValidCheck();
     userCreationDataArr.forEach(userCreationData => {
-      component.firstNameFormControl.setValue(userCreationData.firstName);
-      component.lastNameFormControl.setValue(userCreationData.lastName);
-      component.emailFormControl.setValue(userCreationData.email);
-      component.passwordFormControl.setValue(userCreationData.password);
-      component.repeatPasswordFormControl.setValue(userCreationData.repeatPassword);
+      updateComponentByUserCreationData(component, userCreationData);
       expect(component.signUpFormGroup.valid).toBe(userCreationData.expectedValid);
     });
   });
 
   it('should not call the auth service when the sign up form is not valid', async () => {
-    component.firstNameFormControl.setValue('');
-    component.lastNameFormControl.setValue('');
-    component.emailFormControl.setValue('');
-    component.passwordFormControl.setValue('');
-    component.repeatPasswordFormControl.setValue('');
-
+    updateComponentByUserCreationData(component, inValidComponentUserCreationData);
     await component.signUp();
     expect(authSpy.signUp).toHaveBeenCalledTimes(0);
   });
 
   it('should call the auth service when the sign up form is valid', async () => {
-    component.firstNameFormControl.setValue('Max');
-    component.lastNameFormControl.setValue('Mustermann');
-    component.emailFormControl.setValue('max.mustermann@gmail.com');
-    component.passwordFormControl.setValue('strongPass');
-    component.repeatPasswordFormControl.setValue('strongPass');
-
-    authSpy.signUp.and.returnValue(Promise.resolve());
+    updateComponentByUserCreationData(component, validComponentUserCreationData);
+    authSpy.signUp.and.returnValue(Promise.resolve(
+      {
+        user: {
+          uid: 'newUid'
+        }
+      }
+    ));
     await component.signUp();
     expect(authSpy.signUp).toHaveBeenCalledTimes(1);
   });
 
   it('should open the snack bar when the user creation was not successful', async () => {
-    component.firstNameFormControl.setValue('max');
-    component.lastNameFormControl.setValue('mustermann');
-    component.emailFormControl.setValue('max.mustermann@gmail.com');
-    component.passwordFormControl.setValue('strongPassword');
-    component.repeatPasswordFormControl.setValue('strongPassword');
+    updateComponentByUserCreationData(component, validComponentUserCreationData);
 
     let firebaseError: FirebaseError = {
       code: '',
@@ -112,6 +115,20 @@ describe('SignUpPageComponent', () => {
     authSpy.signUp.and.returnValue(Promise.reject(firebaseError))
     await component.signUp();
     expect(snackBarSpy.open).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call the create user method of the user service when the user is signed up ' +
+    'successfully', async () => {
+    updateComponentByUserCreationData(component, validComponentUserCreationData);
+    let returningCredentials = {
+      user: {
+        uid: 'newUid'
+      }
+    };
+
+    authSpy.signUp.and.returnValue(Promise.resolve(returningCredentials));
+    await component.signUp();
+    expect(userServiceSpy.createUser).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -137,6 +154,15 @@ function getUserCreationDataArrayForValidCheck(): UserCreationDataForValidCheck[
     getUserCreationDataForValidCheck('Max', 'Mustermann', 'max.mustermann@gmail.com',
       'strongPass', 'strongPass', true),
   ];
+}
+
+function updateComponentByUserCreationData(component: SignUpPageComponent,
+                                           componentCreationData: ComponentUserCreationData) {
+  component.firstNameFormControl.setValue(componentCreationData.firstName);
+  component.lastNameFormControl.setValue(componentCreationData.lastName);
+  component.emailFormControl.setValue(componentCreationData.email);
+  component.passwordFormControl.setValue(componentCreationData.password);
+  component.repeatPasswordFormControl.setValue(componentCreationData.repeatPassword);
 }
 
 function getUserCreationDataForValidCheck(firstName: string, lastName: string, email: string,
