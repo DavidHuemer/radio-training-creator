@@ -1,0 +1,35 @@
+@import "variables";
+
+.side-menu {
+  background-color: $dark-color;
+}
+
+.side-menu-header {
+  color: $light-color;
+  text-align: center;
+  font-weight: bold;
+}
+
+.side-menu-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-menu-items * {
+  color: $light-color;
+  text-decoration: none;
+}
+
+.side-menu-items > * {
+  width: 100%;
+  cursor: pointer;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.side-menu-items > *:hover {
+  background-color: $dark-highlight-color;
+}
