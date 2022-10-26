@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 
 import {HomeRoutingModule} from './home-routing.module';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import {MatIconModule} from "@angular/material/icon";
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
   ],
   imports: [
     CommonModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    MatIconModule
   ]
 })
 export class HomeModule {
