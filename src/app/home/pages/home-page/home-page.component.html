@@ -1,1 +1,22 @@
-<p>home-page works!</p>
+<div class="page">
+  <div class="side-menu">
+    <h1 class="side-menu-header">Radio-Training-Creator</h1>
+
+    <div class="side-menu-items">
+      <a routerLink="./projects">
+        <mat-icon>home</mat-icon>
+        <span>
+          Projekte
+        </span>
+      </a>
+      <div>
+        <mat-icon>logout</mat-icon>
+        <span>Abmelden</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

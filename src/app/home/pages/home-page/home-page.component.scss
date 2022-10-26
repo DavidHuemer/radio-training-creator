@@ -1,0 +1,12 @@
+@import "~src/styles/variables";
+@import "~src/styles/pageStyles";
+@import "~src/styles/sideMenuStyles";
+
+.page {
+  display: grid;
+  grid-template-columns: 300px auto;
+}
+
+.main-content {
+  grid-column-start: 2;
+}
