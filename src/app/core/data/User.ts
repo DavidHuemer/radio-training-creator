@@ -6,7 +6,7 @@ export interface UserDataDTO{
   lastName: string,
 }
 
-export interface UserData extends UserDataDTO, DocumentData{
+export interface User extends UserDataDTO, DocumentData{
 
 }
 
