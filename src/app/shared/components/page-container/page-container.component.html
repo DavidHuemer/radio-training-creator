@@ -1,1 +1,18 @@
-<p>page-container works!</p>
+<div class="page-container">
+  <div class="header">
+    <div class="title">{{title}}</div>
+
+    <div class="auth">
+      <div class="username-container" *ngIf="userName">
+        <mat-icon>person</mat-icon>
+        <span class="username">{{userName}}</span>
+      </div>
+
+      <button mat-raised-button color="accent" class="logout" (click)="logoutClicked()">Abmelden</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+</div>

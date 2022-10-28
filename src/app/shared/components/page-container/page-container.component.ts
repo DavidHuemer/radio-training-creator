@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-page-container',
@@ -7,10 +7,18 @@ import {Component, OnInit} from '@angular/core';
 })
 export class PageContainerComponent implements OnInit {
 
+  @Input() userName: string | null = null;
+  @Input() title = '';
+
+  @Output() logout: EventEmitter<void> = new EventEmitter<void>();
+
   constructor() {
   }
 
   ngOnInit(): void {
   }
 
+  logoutClicked() {
+    this.logout.emit();
+  }
 }

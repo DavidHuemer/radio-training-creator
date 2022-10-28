@@ -1,0 +1,30 @@
+@import "~src/styles/variables";
+
+.page-container {
+  background-color: $light-background-color;
+  display: grid;
+  grid-template-rows: 3rem auto;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  grid-row-start: 1;
+  grid-row-end: 2;
+
+  box-shadow: 0 2px 1px -1px #0003, 0 1px 1px #00000024, 0 1px 3px #0000001f;
+  padding: 0.5rem;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.auth {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
