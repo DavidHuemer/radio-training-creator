@@ -3,6 +3,8 @@ import {TestBed} from '@angular/core/testing';
 import {UserService} from './user.service';
 import {Firestore} from "@angular/fire/firestore";
 import SpyObj = jasmine.SpyObj;
+import {User} from "../../data/User";
+import {of} from "rxjs";
 
 describe('UserService', () => {
   let service: UserService;
@@ -34,6 +36,21 @@ describe('UserService', () => {
     });
 
     expect(setDocRefSpy).toHaveBeenCalledTimes(1)
+  });
+
+  it('should return the correct user', async () => {
+    const returningUser: User = {
+      documentId: 'example',
+      lastName: 'mustermann',
+      firstName: 'max'
+    };
+
+    service.docRef = jasmine.createSpy('doc').and.returnValue(Promise.resolve());
+    service.docDataRef = jasmine.createSpy('docData').and.returnValue(of(returningUser));
+
+    service.getUserByUserId('example').subscribe(x => {
+      expect(x).toEqual(returningUser)
+    });
   });
 });
 
