@@ -38,4 +38,11 @@ export class AuthService {
       credentials.password
     );
   }
+
+  /**
+   * Returns the current user id
+   */
+  getUserId() {
+    return this.auth.currentUser?.uid;
+  }
 }

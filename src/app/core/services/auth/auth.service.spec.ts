@@ -4,12 +4,18 @@ import {AuthService} from './auth.service';
 import {Auth} from "@angular/fire/auth";
 
 describe('AuthService', () => {
+  let authMock;
   let service: AuthService;
 
   beforeEach(() => {
+    authMock = {
+      currentUser: {
+        uid: 'example'
+      }
+    };
     TestBed.configureTestingModule({
       providers: [
-        {provide: Auth, useValue: null}
+        {provide: Auth, useValue: authMock}
       ]
     });
     service = TestBed.inject(AuthService);
@@ -33,5 +39,9 @@ describe('AuthService', () => {
     service.signUp({email: '', password: ''}).then(() => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it('should return the correct uid', async () => {
+    expect(service.getUserId()).toBe("example");
   });
 });
