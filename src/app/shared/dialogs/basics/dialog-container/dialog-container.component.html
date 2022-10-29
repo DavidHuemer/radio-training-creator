@@ -1,1 +1,17 @@
-<p>dialog-container works!</p>
+<div class="dialog">
+  <div class="header">
+    <span class="title">
+      {{title}}
+    </span>
+
+    <div class="exit" (click)="exitClicked()">
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+</div>

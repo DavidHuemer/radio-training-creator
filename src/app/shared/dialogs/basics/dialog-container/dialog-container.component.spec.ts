@@ -20,4 +20,10 @@ describe('DialogContainerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit the exit event', () => {
+    spyOn(component.exit, 'emit');
+    component.exitClicked();
+    expect(component.exit.emit).toHaveBeenCalledTimes(1);
+  });
 });

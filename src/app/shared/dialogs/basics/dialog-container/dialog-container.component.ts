@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-dialog-container',
@@ -7,10 +7,16 @@ import {Component, OnInit} from '@angular/core';
 })
 export class DialogContainerComponent implements OnInit {
 
+  @Input() title = "";
+  @Output() exit: EventEmitter<void> = new EventEmitter<void>();
+
   constructor() {
   }
 
   ngOnInit(): void {
   }
 
+  exitClicked() {
+    this.exit.emit();
+  }
 }
